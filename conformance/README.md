@@ -105,6 +105,8 @@ make server-verify
 make server-verify-go
 ```
 
+Cases are validated against [`schemas/server-verification-cases.schema.json`](./schemas/server-verification-cases.schema.json) when the runner loads them, so a fixture with a missing `expected` result, an unknown key, or a duplicate case name fails the run instead of silently reducing coverage.
+
 ## Adapters
 
 Each adapter is a CLI binary that reads from stdin and writes JSON to stdout:

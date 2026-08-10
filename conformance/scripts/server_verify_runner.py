@@ -10,12 +10,20 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from harness import AdapterConfig, AdapterClient, build_adapter, discover_adapters
+from harness import (
+    AdapterConfig,
+    AdapterClient,
+    build_adapter,
+    discover_adapters,
+    load_json,
+    validate_value,
+)
 
 
 SCRIPT_DIR = Path(__file__).parent
 CONFORMANCE_DIR = SCRIPT_DIR.parent
 CASE_FILE = CONFORMANCE_DIR / "server-verification" / "cases.json"
+CASES_SCHEMA = "server-verification-cases.schema.json"
 
 
 @dataclass
@@ -26,11 +34,25 @@ class RunResult:
     error: str | None = None
 
 
-def load_cases() -> list[dict[str, Any]]:
-    parsed = json.loads(CASE_FILE.read_text())
-    cases = parsed.get("cases")
-    if not isinstance(cases, list):
-        raise ValueError("Invalid server verification cases payload")
+def load_cases(path: Path = CASE_FILE) -> list[dict[str, Any]]:
+    """Load and validate the server verification fixtures.
+
+    Vector and flow fixtures are schema-validated on load, but server
+    verification cases were only checked for being a list. A fixture that
+    lost its `expected` result, carried an unknown key, or duplicated a
+    case name still ran and could be reported as conformant.
+    """
+    document = load_json(path)
+    validate_value(document, CASES_SCHEMA, str(path))
+    cases = document["cases"]
+    seen_names: set[str] = set()
+    for case in cases:
+        name = case["name"]
+        if name in seen_names:
+            raise ValueError(
+                f"{path} contains duplicate server verification case name: {name}"
+            )
+        seen_names.add(name)
     return cases
 
 
@@ -76,7 +98,7 @@ def run_adapter(adapter: AdapterConfig, cases: list[dict[str, Any]]) -> list[Run
     client = AdapterClient(adapter)
     results: list[RunResult] = []
     for case in cases:
-        name = str(case.get("name"))
+        name = case["name"]
         try:
             response = client.call(
                 "server.verify",
@@ -116,11 +138,17 @@ def main() -> int:
     args = parser.parse_args()
 
     adapters = discover_adapters()
-    cases = load_cases()
     results: list[RunResult] = []
 
     try:
-        adapter_names = selected_adapters(args.adapter, adapters)
+        cases = load_cases()
+    except (OSError, ValueError) as exc:
+        results.append(RunResult(adapter=args.adapter, name="cases", passed=False, error=str(exc)))
+        cases = []
+
+    try:
+        # An unreadable fixture already failed above; do not build adapters for it.
+        adapter_names = selected_adapters(args.adapter, adapters) if cases else []
     except Exception as exc:
         results.append(RunResult(adapter=args.adapter, name="adapter-selection", passed=False, error=str(exc)))
         adapter_names = []
