@@ -60,7 +60,7 @@ jobs:
       reason: ${{ steps.select.outputs.reason }}
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -114,14 +114,14 @@ jobs:
         working-directory: conformance
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup conformance adapter
-        uses: ./.github/actions/setup-conformance
+        uses: ./.github/actions/setup-conformance # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           adapter: ${{ matrix.adapter }}
 
@@ -175,14 +175,14 @@ jobs:
         working-directory: conformance
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup conformance adapter
-        uses: ./.github/actions/setup-conformance
+        uses: ./.github/actions/setup-conformance # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           adapter: ${{ matrix.adapter }}
           setup-node: "true"
@@ -240,14 +240,14 @@ jobs:
         working-directory: conformance
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup conformance adapter
-        uses: ./.github/actions/setup-conformance
+        uses: ./.github/actions/setup-conformance # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           adapter: go
 
@@ -285,7 +285,7 @@ jobs:
         working-directory: conformance
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

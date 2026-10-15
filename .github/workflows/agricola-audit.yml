@@ -25,13 +25,13 @@ jobs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup Agricola
-        uses: ./.github/actions/setup-agricola
+        uses: ./.github/actions/setup-agricola # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
 
       - name: Build audit matrix
         id: matrix
@@ -60,7 +60,7 @@ jobs:
       id-token: write
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - name: Checkout audit control plane
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -76,12 +76,12 @@ jobs:
           persist-credentials: false
 
       - name: Setup conformance adapter
-        uses: ./.github/actions/setup-conformance
+        uses: ./.github/actions/setup-conformance # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           adapter: typescript
 
       - name: Install audit and conformance runner
-        uses: ./.github/actions/setup-agricola
+        uses: ./.github/actions/setup-agricola # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           setup-python: "false"
 
@@ -146,7 +146,7 @@ jobs:
       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - name: Checkout audit control plane
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -179,13 +179,13 @@ jobs:
           persist-credentials: false
 
       - name: Setup conformance adapter
-        uses: ./.github/actions/setup-conformance
+        uses: ./.github/actions/setup-conformance # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           adapter: ${{ matrix.target }}
           ruby-bundler-cache: "false"
 
       - name: Install audit and conformance runner
-        uses: ./.github/actions/setup-agricola
+        uses: ./.github/actions/setup-agricola # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           setup-python: "false"
 
@@ -230,7 +230,7 @@ jobs:
       - name: Compare SDK implementation to canonical mppx
         id: semantic
         continue-on-error: true
-        uses: tempoxyz/gh-actions/vendor/openai/codex-action@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/vendor/openai/codex-action@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/agricola/audit.md
@@ -290,14 +290,14 @@ jobs:
       STATE_BRANCH: agricola/state
     steps:
       - name: Secure runner
-        uses: tempoxyz/gh-actions/actions/secure-runner@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/secure-runner@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
 
       - name: Setup Agricola
-        uses: ./.github/actions/setup-agricola
+        uses: ./.github/actions/setup-agricola # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
 
       - name: Download audit snapshots
         continue-on-error: true
@@ -320,12 +320,12 @@ jobs:
 
       - name: Fetch GitHub token via STS
         id: sts
-        uses: tempoxyz/gh-actions/actions/github-sts@5e1c1d8d96398c49c836c10964038e10f9d071fc # 2026-10-03T06-17-35Z-5e1c1d8d
+        uses: tempoxyz/gh-actions/actions/github-sts@947d9a3ccb2425a9c94d563fd721cc0e33c89e26 # 2026-10-15T00-15-06Z-947d9a3c
         with:
           policy: agricola-audit-state
 
       - name: Ensure state pull request
-        uses: ./.github/actions/persist-agricola-state
+        uses: ./.github/actions/persist-agricola-state # zizmor: ignore[self-repository] actionlint does not support $/ references yet.
         with:
           token: ${{ steps.sts.outputs.token }}
           base: ${{ env.DEFAULT_BRANCH }}
